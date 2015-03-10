@@ -3,48 +3,69 @@
 Avatars allows you to easily and quickly support avatars throughout your application, by fetching
 the required images and returning either the requested URL, or a 404 image for missing avatar requests. 
 
+## Installation
+
+    composer require floatingpoint/avatars
+
 ## Usage
 
 Usage and retrieval of avatars is very simple. Because the package can be used to access several different
 services, including gravatar or avatars.io, requesting and supporting avatars in your application has
 never been simpler.
 
+First we need to configure Avatar and register our required drivers.
+
 ```php
-$facebook = (new Avatar)->via('facebook')->get($idOrUsername);
-$instagram = (new Avatar)->via('instagram')->get($idOrUsername);
-$gravatar = (new Avatar)->via('gravatar')->get($hash);
+$avatar = new Avatar;
+$avatar->addDriver(new AvatarsIoDriver(['default' => 'facebook']));
+$avatar->addDriver(new GravatarsDriver);
  ```
 
-You may wish to configure avatar defaults, as well - which you can easily do!
+This registers two drivers that we can cycle through, but now let's just work with the Gravatars driver:
 
 ```php
-$avatar = (new Avatar)->default('facebook');
-
-$first = $avatar->get($id)
-$second = $avatar->get($username)
+$avatar->use('gravatars');
 ```
 
-Avatars can also take a configuration array that sets defaults as well as other features, such as the
-driver you'd like to use when sourcing avatars:
+The string here refers to the name of the actual driver that is configured on the driver itself. The current
+available drivers via their names are:
+
+* gravatars and
+* avatars.io
+
+You can switch drivers at any point, simply by calling 'use' again.
+
+### Gravatars
+
+Let's fetch an avatar now from the Gravatars service:
 
 ```php
-$config = [
-    'driver' => 'avatarsio',
-    'default' => 'facebook'
-];
-
-$avatar = new Avatar($configuration);
-$avatar->get($id);
-```
-
-The above code will grab an avatar from the Facebook social platform. What about using the gravatar driver?
-Using the same code from above - we could if we wish simply swap the driver.
-
-```php
-$avatar->driver('gravatar');
 $avatar->get($hash);
 ```
 
-In this manner, Avatar becomes a highly flexible and usable piece of software for all your avatar needs,
-and ensures that you're not locked in to any particular driver or service for implementing avatars
-in your application.
+You can also do it via an email using the same method:
+
+```php
+$avatar->get('me@domain.com');
+```
+
+Now, what if we want to work with Avatars IO service?
+
+### Avatars.IO
+
+```php
+$avatar->use('avatars.io');
+$avatar->get($id);
+```
+
+Remember earlier we set the default service for avatars.io to Facebook? The above call to get would then 
+retrieve an image from the user's facebook account based on the id provided.
+
+We can simplify this further, as well:
+
+```php
+$avatar->get($id, 'avatars.io', 'twitter');
+```
+
+This will fetch an image using the Avatars IO driver, and set the service to be used for the request to twitter.
+In other words, the request will fetch the user's avatar from their twitter account, avoiding the defined default.
