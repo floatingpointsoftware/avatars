@@ -24,7 +24,7 @@ $avatar->addDriver(new GravatarsDriver);
 This registers two drivers that we can cycle through, but now let's just work with the Gravatars driver:
 
 ```php
-$avatar->use('gravatars');
+$avatar->with('gravatars');
 ```
 
 The string here refers to the name of the actual driver that is configured on the driver itself. The current
@@ -40,7 +40,7 @@ You can switch drivers at any point, simply by calling 'use' again.
 Let's fetch an avatar now from the Gravatars service:
 
 ```php
-$avatar->get($hash);
+$avatar->get($hash, $size = 100);
 ```
 
 You can also do it via an email using the same method:
@@ -64,7 +64,7 @@ retrieve an image from the user's facebook account based on the id provided.
 We can simplify this further, as well:
 
 ```php
-$avatar->get($id, 'avatars.io', 'twitter');
+$avatar->get($id, $size, 'avatars.io', 'twitter');
 ```
 
 This will fetch an image using the Avatars IO driver, and set the service to be used for the request to twitter.
