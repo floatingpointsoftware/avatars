@@ -1,0 +1,23 @@
+{
+    "name": "floatingpoint/avatars",
+    "description": "PHP 5.4+ package for supporting avatar usage within projects.",
+    "authors": [
+        {
+            "name": "Kirk Bushell",
+            "email": "torm3nt@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~4.2."
+    },
+    "autoload": {
+        "psr-4": {
+            "FloatingPoint\\Avatars\\": "src",
+            "Tests\\": "tests"
+        }
+    }
+}
